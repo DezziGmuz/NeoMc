@@ -36,7 +36,7 @@ h1,h2,h3,.logo,.stats b{font-family:Silkscreen,monospace;font-weight:700;line-he
 
 /* ===== Hero ===== */
 .hero{max-width:1160px;min-height:100vh;margin:auto;padding:110px 5% 60px;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:40px}
-.hero>*{animation:rise .8s both}
+.hero>*{animation:rise .8s backwards}
 .hero>.crystal{animation-delay:.15s}
 .hero h1{font-size:clamp(42px,8vw,88px);text-shadow:4px 4px 0 var(--pink);margin-bottom:18px}
 .sub{color:var(--cyan);font-weight:500;margin-bottom:10px}
@@ -44,16 +44,20 @@ h1,h2,h3,.logo,.stats b{font-family:Silkscreen,monospace;font-weight:700;line-he
 .stats b{display:block;font-size:24px}
 .stats span{font-size:14px;color:var(--mute)}
 .stats div+div{padding-left:28px;border-left:2px solid var(--line)}
-.crystal{position:relative;display:grid;place-items:center;aspect-ratio:1;max-width:460px;width:100%;justify-self:center}
+.crystal{position:relative;display:grid;place-items:center;aspect-ratio:1;max-width:460px;width:100%;justify-self:center;perspective:900px;transition:transform .12s ease-out}
 .crystal::before,.crystal::after{content:"";position:absolute;aspect-ratio:1;transform:rotate(45deg)}
 .crystal::before{width:74%;border:3px solid var(--pink);box-shadow:0 0 60px var(--pink),inset 0 0 40px color-mix(in srgb,var(--cyan) 35%,transparent);animation:spin 16s linear infinite}
 .crystal::after{width:56%;border:2px solid var(--cyan);animation:spinr 11s linear infinite}
-.crystal img{position:relative;z-index:1;width:52%;filter:drop-shadow(0 14px 24px #0009)}
+.crystal img,.crystal canvas{grid-area:1/1;position:relative;z-index:1;width:52%;filter:drop-shadow(0 14px 24px #0009)}
+.crystal canvas{width:68%;height:auto;cursor:grab;touch-action:pan-y}
+.crystal canvas:active{cursor:grabbing}
 .badge{position:absolute;z-index:2;padding:6px 12px;background:var(--panel);border:2px solid var(--line);border-radius:var(--r);box-shadow:3px 3px 0 var(--line);font-size:14px;font-weight:500}
 .b1{top:8%;left:0}.b2{top:40%;right:-2%}.b3{bottom:8%;left:6%}
-@keyframes spin{to{transform:rotate(405deg)}}
-@keyframes spinr{to{transform:rotate(-315deg)}}
+@keyframes spin{from{transform:rotateY(0deg) rotate(45deg)}to{transform:rotateY(360deg) rotate(45deg)}}
+@keyframes spinr{from{transform:rotateX(0deg) rotate(45deg)}to{transform:rotateX(-360deg) rotate(45deg)}}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}}
+
+.card{transition:transform .12s ease-out,box-shadow .15s}
 
 /* ===== About ===== */
 .about{display:grid;grid-template-columns:240px 1fr;gap:36px;align-items:start}
