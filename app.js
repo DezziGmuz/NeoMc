@@ -111,3 +111,37 @@ const io = new IntersectionObserver(entries => {
   });
 }, { rootMargin: "-45% 0px -50% 0px" });
 document.querySelectorAll("section[id]").forEach(s => io.observe(s));
+
+/* ===== 3D Minecraft skin (skinview3d) ===== */
+// Haqiqiy 64x64 Minecraft skin faylini img/skin.png sifatida qo'ying
+const SKIN = "img/skin.png";
+(function () {
+  const c = $("#skin3d");
+  if (!c) return;
+  if (!window.skinview3d) return c.remove();
+  try {
+    const v = new skinview3d.SkinViewer({ canvas: c, width: 360, height: 460 });
+    v.fov = 35;
+    v.zoom = 0.85;
+    v.autoRotate = true;
+    v.autoRotateSpeed = 1.2;
+    v.animation = new skinview3d.WalkingAnimation();
+    v.controls.enableZoom = false;
+    v.loadSkin(SKIN).then(() => { const f = $("#skin2d"); if (f) f.remove(); }).catch(() => c.remove());
+  } catch (e) { c.remove(); }
+})();
+
+/* ===== 3D tilt: sichqoncha harakatiga ergashadi ===== */
+if (matchMedia("(hover:hover)").matches && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+  const tilt = (el, max, scale) => {
+    el.addEventListener("pointermove", e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${-y * max}deg) rotateY(${x * max}deg) scale(${scale})`;
+    });
+    el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+  };
+  document.querySelectorAll(".crystal").forEach(el => tilt(el, 16, 1));
+  document.querySelectorAll(".card").forEach(el => tilt(el, 8, 1.02));
+}
